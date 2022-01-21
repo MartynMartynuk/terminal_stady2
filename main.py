@@ -31,6 +31,7 @@ def count_clicks(bitly_id, token):
     response.raise_for_status()
     return response.json()["total_clicks"]
 
+
 def make_bitlink(url):
     return urllib.parse.urlparse(url).netloc + \
            urllib.parse.urlparse(url).path
