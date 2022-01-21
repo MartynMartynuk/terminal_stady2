@@ -34,12 +34,15 @@ def count_clicks(bitly_id, token):
     response.raise_for_status()
     return response.json()["total_clicks"]
 
+def make_bitlink(url):
+    return urllib.parse.urlparse(url).netloc + \
+           urllib.parse.urlparse(url).path
+
 
 def is_bitlink(url, token):
     try:
         headers = {"Authorization": f"Bearer {token}"}
-        bitlink = urllib.parse.urlparse(url).netloc + \
-                  urllib.parse.urlparse(url).path
+        bitlink = make_bitlink(url)
         info_url = f"https://api-ssl.bitly.com/v4/bitlinks/{bitlink}"
         response = requests.get(info_url, headers=headers)
         response.raise_for_status()
@@ -54,10 +57,9 @@ if __name__ == "__main__":
     BITLY_TOKEN = os.getenv('BITLY_TOKEN')
 
     incom_url = get_incoming_url()
-    bitlink_detector = is_bitlink(incom_url)
+    bitlink_detector = is_bitlink(incom_url, BITLY_TOKEN)
     if bitlink_detector is True:
-        bitlink_id = urllib.parse.urlparse(incom_url).netloc + \
-                   urllib.parse.urlparse(incom_url).path
+        bitlink_id = make_bitlink(incom_url)
         result = count_clicks(bitlink_id, BITLY_TOKEN)
         print("Количество переходов по ссылке: ", result)
     else:
