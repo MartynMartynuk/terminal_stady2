@@ -2,13 +2,9 @@ import requests
 import urllib
 import os
 from dotenv import load_dotenv
-from pathlib import Path
 
 
-env_path = Path('.')/'.env'
-load_dotenv(dotenv_path=env_path)
-
-TOKEN = os.getenv('BITLY_TOKEN')
+BITLY_TOKEN = os.getenv('BITLY_TOKEN')
 
 
 def input_func():
@@ -22,7 +18,7 @@ def input_func():
                test_response.status_code
 
 
-def shorten_link(long_url, token=TOKEN):
+def shorten_link(long_url, token=BITLY_TOKEN):
     url = "https://api-ssl.bitly.com/v4/shorten"
     headers = {"Authorization": f"Bearer {token}"}
     body = {"long_url": long_url}
@@ -31,7 +27,7 @@ def shorten_link(long_url, token=TOKEN):
     return "Битлинк", response.json()["id"]
 
 
-def count_clicks(bitly_id, token=TOKEN):
+def count_clicks(bitly_id, token=BITLY_TOKEN):
     headers = {"Authorization": f"Bearer {token}"}
     info_url = f"https://api-ssl.bitly.com/v4/bitlinks/{bitly_id}/clicks/summary"
     response = requests.get(info_url, headers=headers)
@@ -39,7 +35,7 @@ def count_clicks(bitly_id, token=TOKEN):
     return "Количество переходов по ссылке", response.json()["total_clicks"]
 
 
-def is_bitlynk(url):
+def is_bitlink(url):
     if urllib.parse.urlparse(url).netloc == "bit.ly":
         bitly_id = urllib.parse.urlparse(url).netloc +\
                    urllib.parse.urlparse(url).path
@@ -49,5 +45,6 @@ def is_bitlynk(url):
 
 
 if __name__ == "__main__":
-    result = is_bitlynk(input_func())
+    load_dotenv()
+    result = is_bitlink(input_func())
     print(f"{result[0]}: {result[1]}")
