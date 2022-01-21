@@ -10,12 +10,12 @@ BITLY_TOKEN = os.getenv('BITLY_TOKEN')
 def get_incoming_url():
     try:
         long_url = input('Введите ссылку: ')
-        test_response = requests.get(long_url)
-        test_response.raise_for_status()
+        response = requests.get(long_url)
+        response.raise_for_status()
         return long_url
     except:
         return "Неверная ссылка\n", "Ошибка! Код ответа:", \
-               test_response.status_code
+               response.status_code
 
 
 def shorten_link(long_url, token=BITLY_TOKEN):
