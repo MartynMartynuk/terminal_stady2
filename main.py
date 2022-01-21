@@ -4,9 +4,6 @@ import os
 from dotenv import load_dotenv
 
 
-
-
-
 def get_incoming_url():
     try:
         long_url = input('Введите ссылку: ')
@@ -49,7 +46,6 @@ def is_bitlink(url, token):
         return True
     except:
         return False
-
 
 
 if __name__ == "__main__":
